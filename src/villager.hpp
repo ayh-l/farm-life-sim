@@ -25,14 +25,14 @@ class Villager : public WorldObject
         std::vector<Conversation*>* getOneHeartConversations();
         std::vector<Conversation*>* getTwoHeartConversations();
         std::vector<Conversation*>* getThreeHeartConversations();
-        std::unordered_map<Item,std::pair<int,Conversation*> >* getGiftConversations();
+        std::unordered_map<std::string,std::pair<int,Conversation*> >* getGiftConversations();
 
     private:
         std::vector<Conversation*>* zeroHeartConversations;   //acquaintance
         std::vector<Conversation*>* oneHeartConversations;    //friend
         std::vector<Conversation*>* twoHeartConversations;    //close friend
         std::vector<Conversation*>* threeHeartConversations;  //best friend
-        std::unordered_map<Item,std::pair<int,Conversation*> >* giftConversations;
+        std::unordered_map<std::string,std::pair<int,Conversation*> >* giftConversations;
         int friendshipPoints; //0-100 points, translates to 0-3 hearts ([0-24],[25-49],[50-74],[75-100])
         bool talkedToToday;
         

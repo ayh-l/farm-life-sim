@@ -11,10 +11,10 @@ std::string Question::getMessage() {
 }
 
 std::pair<Conversation*,int> Question::respond(char interaction) {
-    
-    return std::make_pair(nullptr,0); //stub
+    int response = interaction - '0';
+    return std::make_pair(std::get<2>(nexts[response]), std::get<1>(nexts[response]));
 }
 
 std::vector<std::tuple<std::string, int, Conversation*>> Question::getNexts() const {
-    return {}; //stub
+    return nexts;
 }

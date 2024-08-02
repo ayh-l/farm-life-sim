@@ -186,8 +186,8 @@ TEST_CASE("Question and Speech") {
     REQUIRE(foodQuestion.getNexts() == nexts);
     
     std::pair<Conversation*,int> chocolateResponse = foodQuestion.respond('0');
-    std::pair<Conversation*,int> toastResponse = foodQuestion.respond('0');
-    std::pair<Conversation*,int> secretResponse = foodQuestion.respond('0');
+    std::pair<Conversation*,int> toastResponse = foodQuestion.respond('1');
+    std::pair<Conversation*,int> secretResponse = foodQuestion.respond('2');
 
     REQUIRE(chocolateResponse.first->getMessage() == "A: No way, me too!");
     REQUIRE(chocolateResponse.first->respond('0').first->getMessage() == "Chocolate is my reason for living.");
@@ -213,7 +213,7 @@ void correctConversationForHeartLevelTest(int friendshipPoints, Villager* villag
         acceptableConversations = villager->getOneHeartConversations();
     if (50 <= friendshipPoints && friendshipPoints < 75)
         acceptableConversations = villager->getTwoHeartConversations();
-    if (75 <= friendshipPoints && friendshipPoints < 100)
+    if (75 <= friendshipPoints && friendshipPoints <= 100)
         acceptableConversations = villager->getThreeHeartConversations();
 
     for (int i = 0; i < 10; i++) {
@@ -235,17 +235,29 @@ TEST_CASE("Villager") {
     Speech oneConvoOne = Speech("One convo one.", nullptr);
     Speech oneConvoTwo = Speech("One convo two.", nullptr);
     Speech oneConvoThree = Speech("One convo three.", nullptr);
+    Speech twoConvoOne = Speech("Zero convo one.", nullptr);
+    Speech twoConvoTwo = Speech("Zero convo two.", nullptr);
+    Speech twoConvoThree = Speech("Zero convo three.", nullptr);
+    Speech threeConvoOne = Speech("One convo one.", nullptr);
+    Speech threeConvoTwo = Speech("One convo two.", nullptr);
+    Speech threeConvoThree = Speech("One convo three.", nullptr);
     std::vector<Conversation*> zeroHeartConvos = {&zeroConvoOne,
                                                   &zeroConvoTwo,
                                                   &zeroConvoThree};
     std::vector<Conversation*> oneHeartConvos = {&oneConvoOne,
                                                  &oneConvoTwo,
                                                  &oneConvoThree};
+    std::vector<Conversation*> twoHeartConvos = {&twoConvoOne,
+                                                  &twoConvoTwo,
+                                                  &twoConvoThree};
+    std::vector<Conversation*> threeHeartConvos = {&threeConvoOne,
+                                                 &threeConvoTwo,
+                                                 &threeConvoThree};
     Speech defaultReply = Speech("Thanks!", nullptr);
     Speech appleReply = Speech("I love apples!", nullptr);
     std::unordered_map<std::string,std::pair<int,Conversation*>> giftConversations = {{"default", std::make_pair(0, &defaultReply)},
                                                                                       {"apple", std::make_pair(0, &appleReply)}};
-    Villager june = Villager("June", 0, &zeroHeartConvos, &oneHeartConvos, nullptr, nullptr, &giftConversations);
+    Villager june = Villager("June", 0, &zeroHeartConvos, &oneHeartConvos, &twoHeartConvos, &threeHeartConvos, &giftConversations);
 
     REQUIRE(june.getName() == "June");
     REQUIRE(june.getFriendshipPoints() == 0);
@@ -263,23 +275,6 @@ TEST_CASE("Villager") {
     june.setFriendshipPoints(49);
     correctConversationForHeartLevelTest(49, &june);
     june.setFriendshipPoints(50);
-    REQUIRE(june.talk(nullptr) == nullptr);
-
-    Speech twoConvoOne = Speech("Zero convo one.", nullptr);
-    Speech twoConvoTwo = Speech("Zero convo two.", nullptr);
-    Speech twoConvoThree = Speech("Zero convo three.", nullptr);
-    Speech threeConvoOne = Speech("One convo one.", nullptr);
-    Speech threeConvoTwo = Speech("One convo two.", nullptr);
-    Speech threeConvoThree = Speech("One convo three.", nullptr);
-    std::vector<Conversation*> twoHeartConvos = {&twoConvoOne,
-                                                  &twoConvoTwo,
-                                                  &twoConvoThree};
-    std::vector<Conversation*> threeHeartConvos = {&threeConvoOne,
-                                                 &threeConvoTwo,
-                                                 &threeConvoThree};
-
-    june = Villager("June", 0, &zeroHeartConvos, &oneHeartConvos, &twoHeartConvos, &threeHeartConvos, &giftConversations);
-
     correctConversationForHeartLevelTest(50, &june);
     june.setFriendshipPoints(74);
     correctConversationForHeartLevelTest(74, &june);
