@@ -10,13 +10,18 @@ class EnvironmentTile
         EnvironmentTile(std::string name, int tilled, int watered, bool walkable, bool fishable);
         void till();
         void water();
-        bool walkable();
-        bool fishable();
-        int watered(); // 0-no, 1-yes, 2-not waterable
-        int tilled(); // 0-no, 1-yes, 2-not tillable
+        bool isWalkable();
+        bool isFishable();
+        bool isWatered();
+        bool isTilled();
+        std::string getName();
 
     private:
-    //TODO
+        int watered; // 0-no, 1-yes, 2-not waterable
+        int tilled; // 0-no, 1-yes, 2-not waterable
+        bool walkable;
+        bool fishable;
+        std::string name;
 };
 
 #endif

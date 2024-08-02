@@ -1,4 +1,9 @@
 #include "speech.hpp"
+#include <string>
+
+Speech::Speech(std::string message, Conversation* next) {
+
+}
 
 std::string Speech::getMessage() {
     return ""; //TODO stub

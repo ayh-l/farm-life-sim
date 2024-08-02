@@ -1,11 +1,15 @@
 #include "navigator.hpp"
 #include <utility>
 
+Navigator::Navigator() {
+    
+}
+
 Navigator::Navigator(std::string currentMap, int xPos, int yPos, char directionFacing) {
 
 }
 
-Villager* Navigator::interact(Item* heldItem) {
+WorldObject* Navigator::interact(Item* heldItem) {
     return nullptr; //TODO stub
 }
 void Navigator::walk(char direction) { //one of 'n','e','s','w'
@@ -24,6 +28,9 @@ char Navigator::getDirectionFacing() {
 }
 WorldObject* Navigator::getObjectFacing() {
     return nullptr; //TODO stub
+}
+void Navigator::removeObjectFacing() {
+    
 }
 // EnvironmentTile* Navigator::getEnvTileFacing();
 

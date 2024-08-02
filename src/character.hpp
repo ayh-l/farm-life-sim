@@ -10,7 +10,7 @@ class Character
         void setName(std::string name);
         std::string getName();
     private:
-    //TODO fields
+        std::string name;
 };
 
 #endif

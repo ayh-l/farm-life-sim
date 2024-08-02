@@ -11,6 +11,7 @@
 #include <print>
 #include <cstring>
 #include <string>
+#include <iostream>
 
 ConsolePlayer::ConsolePlayer()
 {
@@ -18,7 +19,7 @@ ConsolePlayer::ConsolePlayer()
     initializeWorld();
     while (keepGoing) {
         printf("current position: %d, %d\n", navigator.getPosition().first, navigator.getPosition().second);
-        printf("facing: %d", navigator.getDirectionFacing());
+        printf("facing: %c\n", navigator.getDirectionFacing());
         printf("what would you like to do?\n n -> walk north\n e -> walk east\n s -> walk south\n w -> walk west\n i  -> interact\n q -> quit\n");
 
         char action;
@@ -31,11 +32,17 @@ ConsolePlayer::ConsolePlayer()
             } 
             case 'i':
             {
-                Villager* villager = navigator.interact(inventory.getHeldItem());
-                if (villager != nullptr) {
-                    talk(villager);
+                WorldObject* facingObject = navigator.interact(inventory.getHeldItem());
+                if (facingObject == nullptr)
+                    break;
+                if (typeid(*facingObject).name() == typeid(Villager).name()) {
+                    talk((Villager*) facingObject);
+                } else if (typeid(*facingObject).name() == typeid(Item).name()) {
+                    if (inventory.hasSpace()) {
+                        inventory.addItem(*((Item*) facingObject));
+                        navigator.removeObjectFacing();
+                    }
                 }
-                // interact();
                 break;
             }
             case 'n':
@@ -60,8 +67,9 @@ ConsolePlayer::ConsolePlayer()
             }
             default:
             {
-                printf("please enter a valid input.");
+                printf("please enter a valid input.\n");
             }
+            std::cin.ignore(100, '\n');
         }
     }
 }
@@ -76,12 +84,15 @@ void ConsolePlayer::passDay()
 
 }
 
-//TODO edit because respond's signature changed (now includes friendship points to add)
 void ConsolePlayer::talk(Villager* villager) {
-    Conversation* conversation = villager->talk(inventory.getHeldItem(), character.getName());
+    Conversation* conversation = villager->talk(inventory.getHeldItem()); // YourName == \t
     while (conversation != nullptr) {
-        
-        printf("%s", conversation->getMessage().c_str());
+        std::string message = conversation->getMessage();
+        //the following two lines are adapted from https://stackoverflow.com/questions/9053687/trying-to-replace-words-in-a-string
+        while (message.find("\t") != message.npos)
+            message.replace(message.find("\t"), character.getName().length(), character.getName());
+        printf("%s", message.c_str());
+
         char* action = nullptr;
         if (typeid(*conversation).name() == typeid(Question).name()) {
             Question question = *((Question*) conversation);
@@ -98,28 +109,8 @@ void ConsolePlayer::talk(Villager* villager) {
             while (action == nullptr || *action != '0')
                 scanf("%c", action);
         }
-        conversation = conversation->respond(*action);
+
+        villager->changeFriendshipPointsBy(conversation->respond(*action).second);
+        conversation = conversation->respond(*action).first;
     }
 }
-
-// void ConsolePlayer::interact()
-// {
-//     EnvironmentTile* facingEnvTile = navigator.getEnvTileFacing();
-//     if (facingEnvTile == nullptr) return; //aka at edge of map
-//     Item* heldItem = inventory.getHeldItem();
-
-//     WorldObject* facingObject = navigator.getObjectFacing();
-
-//     std::string facingObjectType = typeid(facingObject).name();
-//     if (facingObjectType == typeid(Crop).name()) {
-//         std::string heldItemName = heldItem->getName();
-//         if (heldItemName == "hoe") {
-//             (*(Crop*) facingObject).kill();
-//         }
-//     } else if (facingObjectType == typeid(Item).name()) {
-//         inventory.addItem(*(Item*) facingObject);
-//         navigator.
-//     } else if (facingObjectType == typeid(Villager).name()) {
-
-//     }
-// }

@@ -14,6 +14,8 @@ class Item : public WorldObject
         int getPrice();
 
     private:
+        bool tool;
+        int price;
 };
 
 #endif

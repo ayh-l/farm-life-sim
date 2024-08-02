@@ -12,8 +12,9 @@ class Navigator
 {
     //TODO fields
     public:
+        Navigator();
         Navigator(std::string currentMap, int xPos, int yPos, char directionFacing);
-        Villager* interact(Item* heldItem);
+        WorldObject* interact(Item* heldItem); //if facing an item (pickupable) or villager, returns pointer to it.
         void walk(char direction); //one of 'n','e','s','w'
         void passDayUpdateMaps();
 
@@ -21,6 +22,7 @@ class Navigator
         std::pair<int,int> getPosition();
         char getDirectionFacing();
         WorldObject* getObjectFacing();
+        void removeObjectFacing();
         // EnvironmentTile* getEnvTileFacing();
 
     private:

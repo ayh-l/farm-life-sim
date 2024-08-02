@@ -2,23 +2,41 @@
 #include <string>
 
 EnvironmentTile::EnvironmentTile(std::string name, int tilled, int watered, bool walkable, bool fishable) {
-
+    this->name = name;
+    this->tilled = tilled;
+    this->watered = watered;
+    this->walkable = walkable;
+    this->fishable = fishable;
 }
+
 void EnvironmentTile::till() {
-
+    if (tilled == 2)
+        return;
+    tilled = 1;
 }
+
 void EnvironmentTile::water() {
+    if (watered == 2)
+        return;
+    watered = 1;
+}
 
+bool EnvironmentTile::isWalkable() {
+    return walkable;
 }
-bool EnvironmentTile::walkable() {
-    return false; //stub
+
+bool EnvironmentTile::isFishable() {
+    return fishable;
 }
-bool EnvironmentTile::fishable() {
-    return false; //stub
+
+bool EnvironmentTile::isWatered() {
+    return watered == 1;
 }
-int EnvironmentTile::watered() { // 0-no, 1-yes, 2-not waterable
-    return 0; //stub
+
+bool EnvironmentTile::isTilled() {
+    return tilled == 1;
 }
-int EnvironmentTile::tilled() { // 0-no, 1-yes, 2-not tillable
-    return 0; //stub
+
+std::string EnvironmentTile::getName() {
+    return name;
 }

@@ -6,7 +6,11 @@ class WorldObject
 {
     //TODO fields
     public:
+        WorldObject();
+        void setName(std::string name);
         std::string getName();
+    private:
+        std::string name;
 };
 
 #endif

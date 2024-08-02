@@ -12,7 +12,7 @@ class Question : public Conversation {
     public:
         Question(std::string message, std::vector<std::tuple<std::string, int, Conversation*>> nexts); //nexts must not be empty
         std::string getMessage();
-        std::pair<Conversation*,int> respond(char interaction);
+        std::pair<Conversation*,int> respond(char interaction); //assumes interaction is within response range
         std::vector<std::tuple<std::string, int, Conversation*>> getNexts() const;
     private:
         std::string message;
