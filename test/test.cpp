@@ -166,7 +166,79 @@ TEST_CASE("Item") {
 }
 
 TEST_CASE("Navigator") {
-    //TODO
+    Navigator navigator = Navigator();
+    REQUIRE(navigator.getCurrentMap() == 0);
+    REQUIRE(navigator.getPosition() == std::make_pair(2,3));
+    REQUIRE(navigator.getDirectionFacing() == 's');
+    
+    SECTION("walking unobstructed") {
+        navigator.walk('e');
+        REQUIRE(navigator.getCurrentMap() == 0);
+        REQUIRE(navigator.getPosition() == std::make_pair(1,0));
+        REQUIRE(navigator.getDirectionFacing() == 'e');
+        navigator.walk('e');
+        navigator.walk('e');
+        navigator.walk('e');
+        navigator.walk('s');
+        REQUIRE(navigator.getCurrentMap() == 0);
+        REQUIRE(navigator.getPosition() == std::make_pair(4,1));
+        REQUIRE(navigator.getDirectionFacing() == 's');
+        navigator.walk('w');
+        REQUIRE(navigator.getCurrentMap() == 0);
+        REQUIRE(navigator.getPosition() == std::make_pair(3,1));
+        REQUIRE(navigator.getDirectionFacing() == 'w');
+        navigator.walk('n');
+        REQUIRE(navigator.getCurrentMap() == 0);
+        REQUIRE(navigator.getPosition() == std::make_pair(3,0));
+        REQUIRE(navigator.getDirectionFacing() == 'n');
+    }
+
+    SECTION("walking into edge of map and unwalkable environment tiles") {
+        navigator.walk('e');
+        navigator.walk('n');
+        REQUIRE(navigator.getCurrentMap() == 0);
+        REQUIRE(navigator.getPosition() == std::make_pair(1,0));
+        REQUIRE(navigator.getDirectionFacing() == 'n');
+        navigator.walk('s');
+        REQUIRE(navigator.getCurrentMap() == 0);
+        REQUIRE(navigator.getPosition() == std::make_pair(1,0));
+        REQUIRE(navigator.getDirectionFacing() == 's');
+        navigator.setPosition(1, 3);
+        navigator.walk('n');
+        REQUIRE(navigator.getCurrentMap() == 0);
+        REQUIRE(navigator.getPosition() == std::make_pair(1, 3));
+        REQUIRE(navigator.getDirectionFacing() == 'n');
+        navigator.walk('s');
+        navigator.walk('s');
+        REQUIRE(navigator.getCurrentMap() == 0);
+        REQUIRE(navigator.getPosition() == std::make_pair(1, 4));
+        REQUIRE(navigator.getDirectionFacing() == 's');
+        navigator.setPosition(0, 2);
+        navigator.walk('e');
+        REQUIRE(navigator.getCurrentMap() == 0);
+        REQUIRE(navigator.getPosition() == std::make_pair(0, 2));
+        REQUIRE(navigator.getDirectionFacing() == 'e');
+        navigator.walk('w');
+        REQUIRE(navigator.getCurrentMap() == 0);
+        REQUIRE(navigator.getPosition() == std::make_pair(0, 2));
+        REQUIRE(navigator.getDirectionFacing() == 'w');
+        navigator.setPosition(3, 2);
+        navigator.walk('w');
+        REQUIRE(navigator.getCurrentMap() == 0);
+        REQUIRE(navigator.getPosition() == std::make_pair(3, 2));
+        REQUIRE(navigator.getDirectionFacing() == 'w');
+        navigator.setPosition(7, 1);
+        navigator.walk('e');
+        REQUIRE(navigator.getCurrentMap() == 0);
+        REQUIRE(navigator.getPosition() == std::make_pair(7, 1));
+        REQUIRE(navigator.getDirectionFacing() == 'e');
+    }
+
+    SECTION("travelling to different maps (on paths)") {
+        Navigator navigator = Navigator();
+        navigator.setPosition(6, 2);
+        
+    }
 }
 
 TEST_CASE("Question and Speech") {

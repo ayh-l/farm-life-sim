@@ -13,6 +13,7 @@ class Villager : public WorldObject
 {
     //TODO fields
     public:
+        Villager(std::string name);
         Villager(std::string name, int friendshipPoints, std::vector<Conversation*>* zeroHeartConversations, std::vector<Conversation*>* oneHeartConversations, std::vector<Conversation*>* twoHeartConversations, std::vector<Conversation*>* threeHeartConversations, std::unordered_map<std::string,std::pair<int,Conversation*> >* giftConversations);
         Conversation* talk(Item* item);
         void passDay();

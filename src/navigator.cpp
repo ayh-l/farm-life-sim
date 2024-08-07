@@ -2,7 +2,7 @@
 #include <utility>
 
 Navigator::Navigator() {
-    
+    //TODO initialize maps vector
 }
 
 Navigator::Navigator(std::string currentMap, int xPos, int yPos, char directionFacing) {
@@ -19,6 +19,10 @@ void Navigator::passDayUpdateMaps() {
 
 }
 
+void Navigator::changeCurrentMapTo(int mapId) {
+
+}
+
 //for testing purposes / console version? / maybe art needs it too...
 std::pair<int,int> Navigator::getPosition() {
     return std::make_pair(0,0); //TODO stub
@@ -32,14 +36,6 @@ WorldObject* Navigator::getObjectFacing() {
 void Navigator::removeObjectFacing() {
     
 }
-// EnvironmentTile* Navigator::getEnvTileFacing();
+EnvironmentTile* Navigator::getEnvTileFacing() {
 
-void Navigator::removeWorldObjectAtPosition(std::pair<int,int> position) {
-
-}
-void Navigator::addWorldObjectAtPosition(std::pair<int,int> position, WorldObject worldObject) {
-
-}
-WorldObject Navigator::getWorldObjectAtPosition(std::pair<int,int> position) {
-    return WorldObject(); //TODO stub
 }

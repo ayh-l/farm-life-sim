@@ -85,11 +85,11 @@ void ConsolePlayer::passDay()
 }
 
 void ConsolePlayer::talk(Villager* villager) {
-    Conversation* conversation = villager->talk(inventory.getHeldItem()); // YourName == \t
+    Conversation* conversation = villager->talk(inventory.getHeldItem());
     while (conversation != nullptr) {
         std::string message = conversation->getMessage();
         //the following two lines are adapted from https://stackoverflow.com/questions/9053687/trying-to-replace-words-in-a-string
-        while (message.find("\t") != message.npos)
+        while (message.find("\t") != message.npos) // player character's name replaces \t
             message.replace(message.find("\t"), character.getName().length(), character.getName());
         printf("%s", message.c_str());
 
