@@ -1,3 +1,8 @@
+/**
+ * @file character.hpp
+ * Definition of the Crop class.
+ */
+
 #ifndef CROP_H
 #define CROP_H
 
@@ -5,17 +10,52 @@
 
 class Crop : public WorldObject
 {
-    //TODO image setting function (ripe, unripe, dead)
     public:
-        Crop(std::string name, bool isRipe, int futurePrice);
+
+        /**
+         * Constructs a Crop with the given details.
+         * 
+         * @param name Name of Crop
+         * @param futurePrice price of Crop after it ripens and turns into an Item
+         */
+        Crop(std::string name, int futurePrice);
+
+        /**
+         * Kills crop so that it can no longer grow / become ripe.
+         */
         void kill();
+
+        /**
+         * Returns price of ripe Crop.
+         * 
+         * @return Price of ripe Crop.
+         */
         int getFuturePrice();
+
+        /**
+         * Returns true if Crop is alive.
+         * 
+         * @return true if Crop is alive.
+         */
         bool isAlive();
-        bool isRipe(); //is true right before it gets turned into an Item (during passday)
+
+        /**
+         * Sets days until crop is ripe to given value.
+         * 
+         * @param daysTillRipe Desired number of days until crop is ripe.
+         */
+        void setDaysTillRipe(int daysTillRipe);
+
+        /**
+         * Returns days until crop is ripe.
+         * 
+         * @return Number of days until crop is ripe.
+         */
+        int getDaysTillRipe();
 
     private:
-        bool alive;
-        int daysTillRipe;
+        bool wateredToday;
+        int daysTillRipe; //-1 if dead
         int futurePrice;
 };
 

@@ -62,6 +62,8 @@ Map::Map(int mapId) {
             addEnvironmentTileAtPosition(6, 0, EnvironmentTile("tree",                 2, 2, false, false));
             addEnvironmentTileAtPosition(7, 0, EnvironmentTile("tree",                 2, 2, false, false));
             addEnvironmentTileAtPosition(0, 1, EnvironmentTile("tree",                 2, 2, false, false));
+            addWorldObjectAtPosition(5, 1, Item("apple", 10, false));
+            addWorldObjectAtPosition(6, 2, Item("apple", 10, false));
             addEnvironmentTileAtPosition(7, 1, EnvironmentTile("tree",                 2, 2, false, false));
             addEnvironmentTileAtPosition(0, 2, EnvironmentTile("tree",                 2, 2, false, false));
             addEnvironmentTileAtPosition(2, 2, EnvironmentTile("tree house west roof", 2, 2, false, false));

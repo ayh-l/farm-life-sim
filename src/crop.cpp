@@ -1,22 +1,17 @@
 #include "crop.hpp"
 
-Crop::Crop(std::string name, bool isRipe, int futurePrice) {
+Crop::Crop(std::string name, int futurePrice) {
     setName(name);
-    alive = true;
     daysTillRipe = 10;
     this->futurePrice = futurePrice;
 }
 
 void Crop::kill() {
-    alive = false;
+    daysTillRipe = -1;
 }
 
 bool Crop::isAlive() {
-    return alive;
-}
-
-bool Crop::isRipe() {
-    return alive && daysTillRipe == 0;
+    return daysTillRipe > -1;
 }
 
 int Crop::getFuturePrice() {

@@ -22,13 +22,11 @@ TEST_CASE("Character") {
 }
 
 TEST_CASE("Crop") {
-    Crop potato = Crop("Potato", false, 30);
+    Crop potato = Crop("Potato", 30);
     REQUIRE(potato.getName() == "Potato");
     REQUIRE(potato.isAlive());
-    REQUIRE(!potato.isRipe());
     potato.kill();
     REQUIRE(!potato.isAlive());
-    REQUIRE(!potato.isRipe());
     REQUIRE(potato.getFuturePrice() == 30);
 }
 
@@ -158,7 +156,7 @@ TEST_CASE("Item") {
     REQUIRE(priceTool.isTool());
     REQUIRE(priceTool.getPrice() == 10);
 
-    Crop tomatoCrop = Crop("Tomato", true, 10);
+    Crop tomatoCrop = Crop("Tomato", 10);
     Item tomatoItem = Item(tomatoCrop);
     REQUIRE(tomatoItem.getName() == "Tomato");
     REQUIRE(tomatoItem.getPrice() == 10);
@@ -167,28 +165,28 @@ TEST_CASE("Item") {
 
 TEST_CASE("Navigator") {
     Navigator navigator = Navigator();
-    REQUIRE(navigator.getCurrentMap() == 0);
+    REQUIRE(navigator.getCurrentMapIndex() == 0);
     REQUIRE(navigator.getPosition() == std::make_pair(2,3));
     REQUIRE(navigator.getDirectionFacing() == 's');
     
     SECTION("walking unobstructed") {
         navigator.walk('e');
-        REQUIRE(navigator.getCurrentMap() == 0);
+        REQUIRE(navigator.getCurrentMapIndex() == 0);
         REQUIRE(navigator.getPosition() == std::make_pair(1,0));
         REQUIRE(navigator.getDirectionFacing() == 'e');
         navigator.walk('e');
         navigator.walk('e');
         navigator.walk('e');
         navigator.walk('s');
-        REQUIRE(navigator.getCurrentMap() == 0);
+        REQUIRE(navigator.getCurrentMapIndex() == 0);
         REQUIRE(navigator.getPosition() == std::make_pair(4,1));
         REQUIRE(navigator.getDirectionFacing() == 's');
         navigator.walk('w');
-        REQUIRE(navigator.getCurrentMap() == 0);
+        REQUIRE(navigator.getCurrentMapIndex() == 0);
         REQUIRE(navigator.getPosition() == std::make_pair(3,1));
         REQUIRE(navigator.getDirectionFacing() == 'w');
         navigator.walk('n');
-        REQUIRE(navigator.getCurrentMap() == 0);
+        REQUIRE(navigator.getCurrentMapIndex() == 0);
         REQUIRE(navigator.getPosition() == std::make_pair(3,0));
         REQUIRE(navigator.getDirectionFacing() == 'n');
     }
@@ -196,48 +194,95 @@ TEST_CASE("Navigator") {
     SECTION("walking into edge of map and unwalkable environment tiles") {
         navigator.walk('e');
         navigator.walk('n');
-        REQUIRE(navigator.getCurrentMap() == 0);
+        REQUIRE(navigator.getCurrentMapIndex() == 0);
         REQUIRE(navigator.getPosition() == std::make_pair(1,0));
         REQUIRE(navigator.getDirectionFacing() == 'n');
         navigator.walk('s');
-        REQUIRE(navigator.getCurrentMap() == 0);
+        REQUIRE(navigator.getCurrentMapIndex() == 0);
         REQUIRE(navigator.getPosition() == std::make_pair(1,0));
         REQUIRE(navigator.getDirectionFacing() == 's');
         navigator.setPosition(1, 3);
         navigator.walk('n');
-        REQUIRE(navigator.getCurrentMap() == 0);
+        REQUIRE(navigator.getCurrentMapIndex() == 0);
         REQUIRE(navigator.getPosition() == std::make_pair(1, 3));
         REQUIRE(navigator.getDirectionFacing() == 'n');
         navigator.walk('s');
         navigator.walk('s');
-        REQUIRE(navigator.getCurrentMap() == 0);
+        REQUIRE(navigator.getCurrentMapIndex() == 0);
         REQUIRE(navigator.getPosition() == std::make_pair(1, 4));
         REQUIRE(navigator.getDirectionFacing() == 's');
         navigator.setPosition(0, 2);
         navigator.walk('e');
-        REQUIRE(navigator.getCurrentMap() == 0);
+        REQUIRE(navigator.getCurrentMapIndex() == 0);
         REQUIRE(navigator.getPosition() == std::make_pair(0, 2));
         REQUIRE(navigator.getDirectionFacing() == 'e');
         navigator.walk('w');
-        REQUIRE(navigator.getCurrentMap() == 0);
+        REQUIRE(navigator.getCurrentMapIndex() == 0);
         REQUIRE(navigator.getPosition() == std::make_pair(0, 2));
         REQUIRE(navigator.getDirectionFacing() == 'w');
         navigator.setPosition(3, 2);
         navigator.walk('w');
-        REQUIRE(navigator.getCurrentMap() == 0);
+        REQUIRE(navigator.getCurrentMapIndex() == 0);
         REQUIRE(navigator.getPosition() == std::make_pair(3, 2));
         REQUIRE(navigator.getDirectionFacing() == 'w');
         navigator.setPosition(7, 1);
         navigator.walk('e');
-        REQUIRE(navigator.getCurrentMap() == 0);
+        REQUIRE(navigator.getCurrentMapIndex() == 0);
         REQUIRE(navigator.getPosition() == std::make_pair(7, 1));
         REQUIRE(navigator.getDirectionFacing() == 'e');
     }
 
-    SECTION("travelling to different maps (on paths)") {
+    SECTION("travelling on path") {
         Navigator navigator = Navigator();
         navigator.setPosition(6, 2);
-        
+        navigator.walk('e');
+        REQUIRE(navigator.getCurrentMapIndex() == 0);
+        REQUIRE(navigator.getPosition() == std::make_pair(7, 2));
+        navigator.walk('e');
+        REQUIRE(navigator.getCurrentMapIndex() == 1);
+        REQUIRE(navigator.getPosition() == std::make_pair(0, 2));
+        REQUIRE(navigator.getDirectionFacing() == 'e');
+    }
+
+    SECTION("passDay: test villager friendship, crop growth/ripening, item respawn") {
+        Villager* jo = static_cast<Villager*>(navigator.getMaps()[4].getWorldObjectAtPosition(0,2));
+        Villager* laurie = static_cast<Villager*>(navigator.getMaps()[5].getWorldObjectAtPosition(2,1));
+        jo->talk(nullptr);
+        navigator.getMaps()[0].addWorldObjectAtPosition(4,1, Crop("regular vegetable", 10));
+        navigator.getMaps()[0].addWorldObjectAtPosition(4,2, Crop("ripening vegetable", 20));
+        navigator.getMaps()[0].addWorldObjectAtPosition(4,3, Crop("vegetable to be neglected", 30));
+        Crop* regCrop = static_cast<Crop*>(navigator.getMaps()[0].getWorldObjectAtPosition(4,1));
+        Crop* ripCrop = static_cast<Crop*>(navigator.getMaps()[0].getWorldObjectAtPosition(4,2));
+        Crop* negCrop = static_cast<Crop*>(navigator.getMaps()[0].getWorldObjectAtPosition(4,3));
+        ripCrop->setDaysTillRipe(1);
+        navigator.getMaps()[0].getEnvironmentTileAtPosition(4,1).water();
+        navigator.getMaps()[0].getEnvironmentTileAtPosition(4,2).water();
+        REQUIRE(navigator.getMaps()[2].getWorldObjectAtPosition(5,1)->getName() == "apple");
+        REQUIRE(navigator.getMaps()[2].getWorldObjectAtPosition(6,2)->getName() == "apple");
+        navigator.getMaps()[2].removeWorldObjectAtPosition(5,1);
+        REQUIRE(navigator.getMaps()[2].getWorldObjectAtPosition(5,1) == nullptr);
+        navigator.passDayUpdateMaps();
+
+        REQUIRE(jo->getFriendshipPoints() == 5);
+        REQUIRE(laurie->getFriendshipPoints() == 0);
+        REQUIRE(!jo->didTalkToToday());
+        REQUIRE(!laurie->didTalkToToday());
+        Item* harvest = static_cast<Item*>(navigator.getMaps()[0].getWorldObjectAtPosition(4,1));
+        REQUIRE(!harvest->isTool());
+        REQUIRE(regCrop->isAlive());
+        REQUIRE(regCrop->getDaysTillRipe() == 9);
+        REQUIRE(negCrop->getDaysTillRipe() == -1);
+        REQUIRE(!negCrop->isAlive());
+        REQUIRE(navigator.getMaps()[2].getWorldObjectAtPosition(5,1)->getName() == "apple");
+        REQUIRE(navigator.getMaps()[2].getWorldObjectAtPosition(6,2)->getName() == "apple");
+    }
+
+    SECTION("modifying facing object") {
+//todo
+    }
+
+    SECTION("interact") {
+//todo
     }
 }
 
@@ -338,7 +383,9 @@ TEST_CASE("Villager") {
     june.changeFriendshipPointsBy(-20);
     REQUIRE(june.getFriendshipPoints() == 0);
 
+    REQUIRE(!june.didTalkToToday());
     correctConversationForHeartLevelTest(0, &june);
+    REQUIRE(june.didTalkToToday());
     june.setFriendshipPoints(24);
     REQUIRE(june.getFriendshipPoints() == 24);
     correctConversationForHeartLevelTest(24, &june);

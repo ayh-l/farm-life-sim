@@ -5,7 +5,7 @@ Navigator::Navigator() {
     //TODO initialize maps vector
 }
 
-Navigator::Navigator(std::string currentMap, int xPos, int yPos, char directionFacing) {
+Navigator::Navigator(int currentMap, int xPos, int yPos, char directionFacing) {
 
 }
 
@@ -15,6 +15,14 @@ WorldObject* Navigator::interact(Item* heldItem) {
 void Navigator::walk(char direction) { //one of 'n','e','s','w'
 
 }
+
+/**
+ * Appropriately updates villagers, crops and items for the next in-game day.
+ * 
+ * If a villager has been spoken to today, their friendship points increase by 5.
+ * If a crop is on watered soil, the crop remains alive (and possibly ripens into an item), and otherwise is killed.
+ * Any respawning items that have been collected are replaced.
+ */
 void Navigator::passDayUpdateMaps() {
 
 }

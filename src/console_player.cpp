@@ -1,3 +1,8 @@
+/**
+ * @file console_player.cpp
+ * Implementation of the ConsolePlayer class.
+ */
+
 #include "console_player.hpp"
 #include "crop.hpp"
 #include "item.hpp"
@@ -13,6 +18,9 @@
 #include <string>
 #include <iostream>
 
+/**
+ * Constructs a ConsolePlayer.
+ */
 ConsolePlayer::ConsolePlayer()
 {
     bool keepGoing = true;
@@ -74,16 +82,19 @@ ConsolePlayer::ConsolePlayer()
     }
 }
 
+/**
+ * Initializes character, navigator and inventory.
+ */
 void ConsolePlayer::initializeWorld()
 {
-
+    //todo
 }
 
-void ConsolePlayer::passDay()
-{
-
-}
-
+/**
+ * Runs through and prints an appropriate villager conversation.
+ * 
+ * @param villager Pointer to villager with whom to speak.
+ */
 void ConsolePlayer::talk(Villager* villager) {
     Conversation* conversation = villager->talk(inventory.getHeldItem());
     while (conversation != nullptr) {
