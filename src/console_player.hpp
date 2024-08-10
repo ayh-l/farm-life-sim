@@ -27,7 +27,7 @@ class ConsolePlayer {
         void initializeWorld();
 
         /**
-         * Runs through and prints an appropriate villager conversation.
+         * Facilitates and prints an appropriate villager conversation.
          * 
          * @param villager Pointer to villager with whom to speak.
          */

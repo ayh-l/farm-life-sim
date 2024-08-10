@@ -68,7 +68,8 @@
         "regex": "cpp",
         "set": "cpp",
         "stack": "cpp",
-        "print": "cpp"
+        "print": "cpp",
+        "utility": "cpp"
     },
     "cmake.ignoreCMakeListsMissing": true
 }

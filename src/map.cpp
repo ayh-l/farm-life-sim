@@ -1,5 +1,15 @@
+/**
+ * @file map.cpp
+ * Implementation of the Map class.
+ */
+
 #include "map.hpp"
 
+/**
+ * Constructs a map according to given id.
+ * 
+ * @param mapId denotes which map should be constructed: 0 = farm, 1 = town, 2 = forest, 3 = home, 4 = house1, 5 = house2, 6 = stumphouse.
+ */
 Map::Map(int mapId) {
     switch (mapId) {
         case 0: //farm
@@ -144,14 +154,34 @@ Map::Map(int mapId) {
     }
 }
 
+/**
+ * Removes WorldObject at given position (if any).
+ * 
+ * @param x horizontal position of object to be removed
+ * @param y vertical position of object to be removed
+ */
 void Map::removeWorldObjectAtPosition(int x, int y) {
     objects.erase({x,y});
 }
 
+/**
+ * Adds a WorldObject at given position, replacing any existing WorldObject at that position.
+ * 
+ * @param x desired horizontal position of object
+ * @param y desired vertical position of object
+ * @param worldObject object to be added to map
+ */
 void Map::addWorldObjectAtPosition(int x, int y, WorldObject worldObject) {
     objects.insert_or_assign({x,y}, worldObject);
 }
 
+/**
+ * Returns a pointer to WorldObject at given position (nullptr if no object at that position).
+ * 
+ * @param x horizontal position of object
+ * @param y vertical position of object
+ * @return pointer to WorldObject at given position
+ */
 WorldObject* Map::getWorldObjectAtPosition(int x, int y) {
     auto search = objects.find({x,y});
     if (search == objects.end())
@@ -159,11 +189,27 @@ WorldObject* Map::getWorldObjectAtPosition(int x, int y) {
     return &(search->second);
 }
 
+/**
+ * Adds an EnvironmentTile at given position, replacing any existing tile at that position.
+ * 
+ * @param x desired horizontal position of tile
+ * @param y desired vertical position of tile
+ * @param environmentTile tile to be added to map
+ */
 void Map::addEnvironmentTileAtPosition(int x, int y, EnvironmentTile environmentTile) {
     environmentTiles.insert_or_assign({x,y}, environmentTile);
 }
 
-EnvironmentTile Map::getEnvironmentTileAtPosition(int x, int y) {
+/**
+ * Returns a pointer to EnvironmentTile at given position (nullptr if no object at that position).
+ * 
+ * @param x horizontal position of tile
+ * @param y vertical position of tile
+ * @return pointer to EnvironmentTile at given position
+ */
+EnvironmentTile* Map::getEnvironmentTileAtPosition(int x, int y) {
     auto search = environmentTiles.find({x,y});
-    return search->second;
+    if (search == environmentTiles.end())
+        return nullptr;
+    return &search->second;
 }

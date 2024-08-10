@@ -91,7 +91,7 @@ void ConsolePlayer::initializeWorld()
 }
 
 /**
- * Runs through and prints an appropriate villager conversation.
+ * Facilitates and prints an appropriate villager conversation.
  * 
  * @param villager Pointer to villager with whom to speak.
  */
@@ -121,6 +121,8 @@ void ConsolePlayer::talk(Villager* villager) {
                 scanf("%c", action);
         }
 
+        if (!inventory.getHeldItem()->isTool())
+            inventory.removeHeldItem();
         villager->changeFriendshipPointsBy(conversation->respond(*action).second);
         conversation = conversation->respond(*action).first;
     }
