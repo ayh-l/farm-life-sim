@@ -255,8 +255,8 @@ TEST_CASE("Navigator") {
         Crop* ripCrop = static_cast<Crop*>(navigator.getMaps()[0].getWorldObjectAtPosition(4,2));
         Crop* negCrop = static_cast<Crop*>(navigator.getMaps()[0].getWorldObjectAtPosition(4,3));
         ripCrop->setDaysTillRipe(1);
-        navigator.getMaps()[0].getEnvironmentTileAtPosition(4,1).water();
-        navigator.getMaps()[0].getEnvironmentTileAtPosition(4,2).water();
+        navigator.getMaps()[0].getEnvironmentTileAtPosition(4,1)->water();
+        navigator.getMaps()[0].getEnvironmentTileAtPosition(4,2)->water();
         REQUIRE(navigator.getMaps()[2].getWorldObjectAtPosition(5,1)->getName() == "apple");
         REQUIRE(navigator.getMaps()[2].getWorldObjectAtPosition(6,2)->getName() == "apple");
         navigator.getMaps()[2].removeWorldObjectAtPosition(5,1);
